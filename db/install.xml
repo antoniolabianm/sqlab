@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<XMLDB PATH="mod/sqlab/db" VERSION="20240427" COMMENT="XMLDB file for Moodle mod/sqlab"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+
+  <TABLES>
+
+    <TABLE NAME="sqlab" COMMENT="SQLab main table.">
+
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary table key."/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Foreign key that refers to the course this record belongs to."/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name of the instance (Exercise 1, Practice 7...)."/>
+        <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the quiz that SQLab will use to obtain the questions."/>
+        <!-- <FIELD NAME="startdate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date the SQLab will be avaliable."/> -->
+        <!-- <FIELD NAME="duedate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="After this date this SQLab instance will not be available."/> -->
+        <!-- <FIELD NAME="visiblegrade" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="0 visible grade no, 1 yes."/> -->
+        <FIELD NAME="activitypassword" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Password required to start the activity."/>
+      </FIELDS>
+
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+
+      <INDEXES>
+        <INDEX NAME="course_idx" UNIQUE="false" FIELDS="course"/>
+        <!-- <INDEX NAME="startdate_indx" UNIQUE="false" FIELDS="startdate"/> -->
+      </INDEXES>
+      
+    </TABLE>
+
+    <TABLE NAME="sqlab_attempts" COMMENT="Stores users attempts at sqlab activities.">
+
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary table key."/>
+        <FIELD NAME="sqlabid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Foreign key reference to the sqlab activity that was attempted."/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Foreign key reference to the user whose attempt this is."/>
+        <FIELD NAME="attempt" TYPE="int" LENGTH="6" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Sequentially numbers this student's attempts at this sqlab activity."/>
+        <FIELD NAME="state" TYPE="char" LENGTH="16" NOTNULL="true" DEFAULT="inprogress" SEQUENCE="false" COMMENT="The current state of the attempts. 'inprogress', 'overdue' or 'finished'."/>
+        <FIELD NAME="timestart" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Time when the attempt was started."/>
+        <FIELD NAME="timefinish" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Time when the attempt was submitted. 0 if the attempt has not been submitted yet."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Last modified time."/>
+        <FIELD NAME="sumgrades" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5" COMMENT="Total marks for this attempt."/>
+      </FIELDS>
+
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="sqlabid" TYPE="foreign" FIELDS="sqlabid" REFTABLE="sqlab" REFFIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+
+      <INDEXES>
+        <INDEX NAME="sqlab-userid-attempt" UNIQUE="true" FIELDS="sqlabid, userid, attempt"/>
+      </INDEXES>
+
+    </TABLE>
+
+    <TABLE NAME="sqlab_db_user_credentials" COMMENT="Table to store the credentials of the users' PostgreSQL databases.">
+
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary table key."/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="User's identifier to which these credentials belong."/>
+        <FIELD NAME="username" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Database username for the PostgreSQL user."/>
+        <FIELD NAME="password" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Encrypted password for the PostgreSQL database user."/>
+      </FIELDS>
+
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+
+      <INDEXES>
+        <INDEX NAME="userid_idx" UNIQUE="false" FIELDS="userid"/>
+      </INDEXES>
+
+    </TABLE>
+
+    <TABLE NAME="sqlab_code_executions" COMMENT="Stores all code executions and responses for SQLab attempts.">
+
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary table key."/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Id of the user who executed the code."/>
+        <FIELD NAME="attemptid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Id of the attempt during which the code was executed."/>
+        <FIELD NAME="executed_code" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="The code that was executed by the user."/>
+        <FIELD NAME="received_reply" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="The response received from the code execution."/>
+        <FIELD NAME="execution_timestamp" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false" COMMENT="The timestamp when the execution was saved in ISO 8601 format."/>
+      </FIELDS>
+
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+
+      <INDEXES>
+        <INDEX NAME="user_attempt_idx" UNIQUE="false" FIELDS="userid, attemptid"/>
+      </INDEXES>
+
+    </TABLE>
+
+    <TABLE NAME="sqlab_responses" COMMENT="Stores the answers to each question in the attempt for later evaluation.">
+
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary table key."/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Id of the user who executed the code."/>
+        <FIELD NAME="attemptid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Id of the attempt during which the code was executed."/>
+        <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Id of the question to which the stored response corresponds."/>
+        <FIELD NAME="response" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Response given by the user."/>
+        <FIELD NAME="currentmaxgrade" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="0.0" SEQUENCE="false" COMMENT="Current grade after penalties for this response."/>
+        <FIELD NAME="execution_count" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Execution count (only for the code evaluation button)."/>
+        <FIELD NAME="gradeobtained" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="0.0" SEQUENCE="false" COMMENT="Grade obtained for this response."/>
+        <FIELD NAME="feedback" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Feedback obtained from the SQL function, if there is something wrong with the response."/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp when the response was created."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp when the response was last modified."/>
+      </FIELDS>
+
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="attemptid" TYPE="foreign" FIELDS="attemptid" REFTABLE="sqlab_attempts" REFFIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="sqlab_attempts" REFFIELDS="userid"/>
+      </KEYS>
+
+      <INDEXES>
+        <INDEX NAME="attempt_question_idx" UNIQUE="true" FIELDS="attemptid, questionid"/>
+      </INDEXES>
+
+    </TABLE>
+
+  </TABLES>
+
+</XMLDB>
