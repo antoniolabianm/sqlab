@@ -183,7 +183,7 @@ foreach ($questions as $question) {
     $questionTotalGrade = round($question['questiongrade'], 2);
 
     // Retrieve user's response or indicate if no response is provided.
-    $userResponse = $response ? htmlspecialchars_decode($response->response, ENT_QUOTES) : get_string('noresponseprovided', 'sqlab');
+    $userResponse = (isset($response) && trim($response->response) !== '') ? htmlspecialchars_decode($response->response, ENT_QUOTES) : get_string('noresponseprovided', 'sqlab');
 
     // Retrieve solution for the question.
     $solution = htmlspecialchars_decode($question['solution'], ENT_QUOTES);

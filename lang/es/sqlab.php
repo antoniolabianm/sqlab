@@ -31,7 +31,7 @@ $string['question'] = 'Pregunta';
 $string['saved'] = 'Respuesta guardada';
 $string['notsaved'] = 'Aún sin responder';
 $string['questionnavtittle'] = 'Navegación de preguntas';
-$string['noresponseprovided'] = '-- No se ha proporcionado una respuesta';
+$string['noresponseprovided'] = '-- No se ha proporcionado una respuesta.';
 $string['userresponsereview'] = 'Su respuesta';
 $string['solutionreview'] = 'Solución';
 
