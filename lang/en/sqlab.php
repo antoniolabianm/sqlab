@@ -119,5 +119,5 @@ $string['is_correct'] = 'Is correct?';
 $string['status'] = 'Status';
 $string['your_answer'] = 'Your answer';
 $string['expected_answer'] = 'Expected answer';
-$string['all_rows_correct'] = 'All rows are correct.';
-$string['no_response_provided'] = 'No response provided.';
+$string['all_rows_correct_feedback'] = 'All rows are correct.';
+$string['no_response_feedback'] = 'No response provided.';

@@ -66,7 +66,7 @@ try {
     redirect(new moodle_url('/mod/sqlab/review.php', ['attempt' => $attemptid, 'cmid' => $cmid]));
 
 } catch (Exception $e) {
-
+    error_log("error procesar intento: " . $e->getMessage());
     // Notify the user that an error occurred while the attempt was being processed.
     \core\notification::error(get_string('errorprocessattempt', 'sqlab'));
 

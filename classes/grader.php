@@ -24,9 +24,6 @@ class grader
 
         // Retrieve the responses for the attempt.
         $questions = $DB->get_records('sqlab_responses', ['attemptid' => $attemptid, 'userid' => $attempt->userid]);
-        if (empty($questions)) {
-            throw new \moodle_exception('noresponsesfound', 'sqlab', '', "No responses found for attempt ID {$attemptid}");
-        }
 
         // Load the SQLab instance data.
         $sqlab = $DB->get_record('sqlab', ['id' => $attempt->sqlabid]);
@@ -99,7 +96,7 @@ class grader
     {
         // Return zero grade if student's response is empty.
         if (empty($response->response)) {
-            return ['grade' => 0.0, 'feedback' => get_string('no_response_provided', 'sqlab')];
+            return ['grade' => 0.0, 'feedback' => get_string('no_response_feedback', 'sqlab')];
         }
 
         // Get all questions from the quiz.
@@ -214,7 +211,7 @@ class grader
 
         // Return the results of the comparison and the score.
         if ($allRowsCorrect) {
-            return ['grade' => $maxGrade, 'feedback' => get_string('all_rows_correct', 'sqlab')];
+            return ['grade' => $maxGrade, 'feedback' => get_string('all_rows_correct_feedback', 'sqlab')];
         } else {
             $detailedFeedback = implode("\n", $feedbackDetails);
             return ['grade' => 0.0, 'feedback' => $detailedFeedback];

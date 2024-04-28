@@ -174,7 +174,7 @@ foreach ($questions as $question) {
     $response = $DB->get_record('sqlab_responses', ['attemptid' => $attemptid, 'questionid' => $question['questionid']]);
 
     // Get the feedback given by the SQL function.
-    $userFeedback = $response ? $response->feedback : get_string('noresponseprovided', 'sqlab');
+    $userFeedback = $response ? $response->feedback : get_string('no_response_feedback', 'sqlab');
 
     // Calculate user's obtained grade for the question.
     $userGradeObtained = $response ? round($response->gradeobtained, 2) : 0.00;
