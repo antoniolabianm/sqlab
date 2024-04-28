@@ -109,3 +109,15 @@ $string['scoresas'] = 'Puntúa como';
 $string['sqlresults'] = 'Resultados esperados';
 $string['relatedconcepts'] = 'Conceptos relacionados';
 $string['hints'] = 'Pistas';
+
+// Retroalimentación
+$string['yes'] = 'Sí';
+$string['no'] = 'No';
+$string['not_present'] = 'No presente';
+$string['row'] = 'Fila';
+$string['is_correct'] = '¿Es correcto?';
+$string['status'] = 'Estado';
+$string['your_answer'] = 'Su respuesta';
+$string['expected_answer'] = 'Respuesta esperada';
+$string['all_rows_correct'] = 'Todas las filas son correctas.';
+$string['no_response_provided'] = 'No se ha dado respuesta.';

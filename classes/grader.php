@@ -99,7 +99,7 @@ class grader
     {
         // Return zero grade if student's response is empty.
         if (empty($response->response)) {
-            return ['grade' => 0.0, 'feedback' => 'No response provided.'];
+            return ['grade' => 0.0, 'feedback' => get_string('no_response_provided', 'sqlab')];
         }
 
         // Get all questions from the quiz.
@@ -166,51 +166,47 @@ class grader
             throw new \moodle_exception("The names of the views could not be found in the query.");
         }
 
-        // Evaluate each row of the score to determine the final score and collect details of incorrect rows.
-        // $allRowsCorrect = true;
-        // $feedbackDetails = [];
-        // while ($row = pg_fetch_assoc($result)) {
-        //     if ($row['is_row_correct'] !== 't') {
-        //         $allRowsCorrect = false;
-        //         $feedbackDetails[] = "<li>Row {$row['norder']} incorrect: {$row['is_in_solution']}.</li>";
-        //     }
-        // }
+        $allRowsCorrect = true; // Initialize flag to true, assuming all rows are initially correct.
+        $feedbackDetails = []; // Array to store HTML details for feedback.
+        $rows = []; // Array to store each row's HTML representation.
 
-        $allRowsCorrect = true;
-        $feedbackDetails = [];
-        $rows = [];
         while ($row = pg_fetch_assoc($result)) {
+
             if ($row['is_row_correct'] !== 't') {
-                $allRowsCorrect = false;
+                $allRowsCorrect = false; // Set flag to false if any row is not correct.
             }
 
+            // Construct row HTML for display.
             $rows[] = "<tr class='sql-results-row'>\n" .
                 "<td class='sql-results-data'>{$row['norder']}</td>\n" .
-                "<td class='sql-results-data'>" . ($row['is_row_correct'] === 't' ? 'Yes' : 'No') . "</td>\n" .
+                "<td class='sql-results-data'>" . ($row['is_row_correct'] === 't' ? get_string('yes', 'sqlab') : get_string('no', 'sqlab')) . "</td>\n" .
                 "<td class='sql-results-data'>{$row['is_in_solution']}</td>\n" .
-                "<td class='sql-results-data'>" . ($row['view1_row'] ? htmlspecialchars($row['view1_row']) : 'Not present') . "</td>\n" .
-                "<td class='sql-results-data'>" . ($row['view2_row'] ? htmlspecialchars($row['view2_row']) : 'Not present') . "</td>\n" .
+                "<td class='sql-results-data'>" . ($row['view1_row'] ? htmlspecialchars($row['view1_row']) : get_string('not_present', 'sqlab')) . "</td>\n" .
+                "<td class='sql-results-data'>" . ($row['view2_row'] ? htmlspecialchars($row['view2_row']) : get_string('not_present', 'sqlab')) . "</td>\n" .
                 "</tr>\n";
+
         }
 
         if (!$allRowsCorrect) {
-            // Agregar el encabezado de la tabla
+
+            // Add table header.
             $feedbackDetails[] = "<table class='sql-query-results'>\n" .
                 "<tr class='sql-results-header'>\n" .
-                "<th class='sql-results-header'>Row</th>\n" .
-                "<th class='sql-results-header'>Is correct?</th>\n" .
-                "<th class='sql-results-header'>Status</th>\n" .
-                "<th class='sql-results-header'>Your answer</th>\n" .
-                "<th class='sql-results-header'>Expected answer</th>\n" .
+                "<th class='sql-results-header'>" . get_string('row', 'sqlab') . "</th>\n" .
+                "<th class='sql-results-header'>" . get_string('is_correct', 'sqlab') . "</th>\n" .
+                "<th class='sql-results-header'>" . get_string('status', 'sqlab') . "</th>\n" .
+                "<th class='sql-results-header'>" . get_string('your_answer', 'sqlab') . "</th>\n" .
+                "<th class='sql-results-header'>" . get_string('expected_answer', 'sqlab') . "</th>\n" .
                 "</tr>\n";
 
-            // Agregar todas las filas almacenadas a la tabla
+            // Add rows to the table,
             foreach ($rows as $rowHtml) {
                 $feedbackDetails[] = $rowHtml;
             }
 
-            // Cerrar la tabla
+            // Close the HTML table structure.
             $feedbackDetails[] = "</table>\n";
+
         }
 
         // Clean up views to avoid future conflicts.
@@ -218,9 +214,8 @@ class grader
 
         // Return the results of the comparison and the score.
         if ($allRowsCorrect) {
-            return ['grade' => $maxGrade, 'feedback' => 'All rows are correct.'];
+            return ['grade' => $maxGrade, 'feedback' => get_string('all_rows_correct', 'sqlab')];
         } else {
-            // $detailedFeedback = "<ul>" . implode("\n", $feedbackDetails) . "</ul>";
             $detailedFeedback = implode("\n", $feedbackDetails);
             return ['grade' => 0.0, 'feedback' => $detailedFeedback];
         }

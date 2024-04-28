@@ -109,3 +109,15 @@ $string['scoresas'] = 'Score as';
 $string['sqlresults'] = 'Expected results';
 $string['relatedconcepts'] = 'Related concepts';
 $string['hints'] = 'Hints';
+
+// Feedback
+$string['yes'] = 'Yes';
+$string['no'] = 'No';
+$string['not_present'] = 'Not present';
+$string['row'] = 'Row';
+$string['is_correct'] = 'Is correct?';
+$string['status'] = 'Status';
+$string['your_answer'] = 'Your answer';
+$string['expected_answer'] = 'Expected answer';
+$string['all_rows_correct'] = 'All rows are correct.';
+$string['no_response_provided'] = 'No response provided.';
