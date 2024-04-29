@@ -83,6 +83,7 @@
         <FIELD NAME="attemptid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Id of the attempt during which the code was executed."/>
         <FIELD NAME="executed_code" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="The code that was executed by the user."/>
         <FIELD NAME="received_reply" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="The response received from the code execution."/>
+        <FIELD NAME="action" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Used button."/>
         <FIELD NAME="execution_timestamp" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false" COMMENT="The timestamp when the execution was saved in ISO 8601 format."/>
       </FIELDS>
 

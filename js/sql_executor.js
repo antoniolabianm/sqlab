@@ -1,9 +1,9 @@
 // Attach event listeners to execute and evaluate SQL buttons.
-document.getElementById("executeSqlButton").addEventListener("click", executeSql);
-document.getElementById("evaluateSqlButton").addEventListener("click", executeSql);
+document.getElementById("executeSqlButton").addEventListener("click", function() { executeSql('execute'); });
+document.getElementById("evaluateSqlButton").addEventListener("click", function() { executeSql('evaluate'); });
 
 // Function to execute SQL from the CodeMirror editor.
-function executeSql() {
+function executeSql(action) {
   // Retrieve CodeMirror instance and SQL text.
   var codeMirrorInstance = document.querySelector(".CodeMirror").CodeMirror;
   var sql = codeMirrorInstance.getSelection().trim() || codeMirrorInstance.getValue().trim();
@@ -22,7 +22,7 @@ function executeSql() {
   }
 
   // Data for POST request.
-  var data = { sql: sql, attempt: attemptid };
+  var data = { sql: sql, attempt: attemptid, action: action };
 
   // Send POST request to execute SQL.
   fetch("/mod/sqlab/execute_sql.php", {

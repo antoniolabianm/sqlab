@@ -21,13 +21,14 @@ try {
     $input = json_decode($json_input, true);
 
     // Check if all required parameters are provided.
-    if (!isset($input['attempt']) || !isset($input['sql'])) {
+    if (!isset($input['attempt']) || !isset($input['sql']) || !isset($input['action'])) {
         throw new moodle_exception('missingparameters', 'sqlab');
     }
 
     // Extract parameters from the input.
     $attemptid = $input['attempt'];
     $sql = $input['sql'];
+    $action = $input['action'];
 
     // Retrieve records from the database based on the provided attempt ID.
     $attempt = $DB->get_record('sqlab_attempts', ['id' => $attemptid], '*', IGNORE_MISSING);
@@ -67,6 +68,7 @@ try {
     $record->userid = $USER->id;
     $record->attemptid = $attemptid;
     $record->executed_code = $sql;
+    $record->action = $action;
     $record->received_reply = json_encode($resultsArray);
     $record->execution_timestamp = date('Y-m-d\TH:i:s\Z');
 
