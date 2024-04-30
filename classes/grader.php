@@ -53,32 +53,47 @@ class grader
 
         try {
 
-            // Drop the old schema.
+            // Initialize flag to prevent schema deletion on error.
+            $deleteSchema = false;
+
+            // Remove the existing scheme to ensure a clean state of the scheme.
             schema_manager::drop_schema($studentDBConnection, $schemaName);
 
-            // Recreate a clean schema.
+            // Recreate the scheme, preparing it to evaluate the attempt.
             schema_manager::create_schema_for_activity($studentDBConnection, $schemaName, $userCredentials->username);
 
-            // Evaluate each question to obtain an overall assessment of the attempt.
+            // Initialize total grade for the attempt.
             $totalGrade = 0.0;
+
+            // Evaluate each question response and calculate the total grade.
             foreach ($questions as $response) {
                 $result = self::gradeQuestion($studentDBConnection, $response, $schemaName, $sqlab);
                 $questionGrade = (float) $result['grade'];
 
+                // Store the individual grades and feedback for each response.
                 $DB->set_field('sqlab_responses', 'gradeobtained', $questionGrade, ['id' => $response->id]);
                 $DB->set_field('sqlab_responses', 'feedback', $result['feedback'], ['id' => $response->id]);
 
                 $totalGrade += $questionGrade;
             }
 
-            // Update the total grade for the attempt.
+            // Update the total grade for the attempt in the database.
             $DB->set_field('sqlab_attempts', 'sumgrades', $totalGrade, ['id' => $attemptid]);
 
+            // Set flag to true as all operations completed successfully.
+            $deleteSchema = true;
+
         } catch (\Exception $e) {
+            // Handle exceptions by logging and rethrowing a Moodle-specific exception.
             throw new \moodle_exception('dberror', 'sqlab', '', "Transaction failed on attempt ID {$attemptid}: " . $e->getMessage());
         } finally {
-            schema_manager::drop_schema($studentDBConnection, $schemaName);
-            $dbConnector->closeConnection(); // Close the student's database connection.
+            // Conditionally drop the schema if all operations were successful.
+            if ($deleteSchema) {
+                schema_manager::drop_schema($studentDBConnection, $schemaName);
+            }
+
+            // Always close the database connection to free resources.
+            $dbConnector->closeConnection();
         }
     }
 
