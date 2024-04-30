@@ -2,16 +2,16 @@
 
 SQLab is an educational tool for Moodle that enables instructors and students to interact with PostgreSQL databases. It provides a hands-on learning platform similar to tools like CodeRunner or VPL, but is specifically designed for SQL database management and querying exercises.
 
-Version: 4.5.7 - 30 April 2024.
+**Version**: 4.5.7 - 30 April 2024.
 
-Author: José Fernández Carmona, University of Castilla - La Mancha, Spain.
+**Author**: José Fernández Carmona, University of Castilla - La Mancha, Spain.
 
 ## Features ##
 
-- Isolated Environments: Each student works within a dedicated schema, ensuring that their work is sandboxed from others.
-- Real-time SQL Execution: Students can execute SQL commands and see immediate results, enhancing the learning experience.
-- Automatic Grading: The plugin supports automatic grading based on predefined correct SQL queries.
-- Error Handling: Provides robust error feedback to help students learn from their mistakes.
+- **Isolated Environments**: Each student works within a dedicated schema, ensuring that their work is sandboxed from others.
+- **Real-time SQL Execution**: Students can execute SQL commands and see immediate results, enhancing the learning experience.
+- **Automatic Grading**: The plugin supports automatic grading based on predefined correct SQL queries.
+- **Error Handling**: Provides robust error feedback to help students learn from their mistakes.
 
 ## Installation ##
 
@@ -46,4 +46,4 @@ See the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.html) 
 
 For more information, contact me:
 
-Email: [Jose.Fdez@alu.uclm.es](mailto:Jose.Fdez@alu.uclm.es)
+- **Email**: [Jose.Fdez@alu.uclm.es](mailto:Jose.Fdez@alu.uclm.es)
