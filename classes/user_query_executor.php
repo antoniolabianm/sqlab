@@ -6,52 +6,181 @@ defined('MOODLE_INTERNAL') || die();
 
 class user_query_executor
 {
+    // List of SQL keywords to ignore while processing queries.
+    protected static $ignoreConnectors = [
+        'OR',
+        'REPLACE',
+        'AND',
+        'ON',
+        'LIMIT',
+        'WHERE',
+        'JOIN',
+        'GROUP',
+        'ORDER',
+        'OPTION',
+        'LEFT',
+        'INNER',
+        'RIGHT',
+        'OUTER',
+        'SET',
+        'HAVING',
+        'VALUES'
+    ];
+
     /**
-     * Analyzes a multi-line SQL script and determines the types of queries it contains.
+     * Detects the types of SQL statements within a provided SQL query.
      *
-     * @param string $sql The full SQL script containing one or more statements.
-     * @return array An array of identified query types for each statement in the script.
+     * @param string $sql The complete SQL query string from which types of statements are to be detected.
+     * @return array An array listing the detected types of the SQL statements.
      */
-    public static function detectQueryType($sql)
+    private static function detectQueryType($sql)
     {
-        $lines = explode("\n", $sql);
+        // Remove SQL comments to prepare the string for processing.
+        $sql = preg_replace('/(--.*)|(\s*\/\*[\s\S]*?\*\/)/', '', $sql);
+
+        // Split the cleaned SQL into individual statements for further analysis.
+        $statements = self::splitSqlStatements($sql);
         $queryTypes = [];
-        $currentStatement = '';
 
-        foreach ($lines as $line) {
-            $trimmedLine = trim($line);
-
-            // Skip empty lines and comments.
-            if (empty($trimmedLine) || strpos($trimmedLine, '--') === 0) {
-                continue;
-            }
-
-            $currentStatement .= ' ' . $trimmedLine;
-
-            // If semicolon found, process the statement.
-            if (strrpos($trimmedLine, ';') === strlen($trimmedLine) - 1) {
-                $queryType = self::detectStatementType($currentStatement);
+        // Iterate through each statement to determine its type.
+        foreach ($statements as $statement) {
+            if (trim($statement)) {
+                // Detect and record the type of the SQL statement.
+                $queryType = self::detectStatementType($statement);
                 $queryTypes[] = $queryType;
-                $currentStatement = ''; // Reset for the next statement.
             }
         }
 
+        // Return the list of detected SQL statement types.
         return $queryTypes;
     }
 
     /**
-     * Identifies the type of a single SQL statement.
+     * Splits the provided SQL into individual statements.
+     * Handles special SQL blocks (functions, triggers) and regular SQL statements.
      *
-     * @param string $statement The SQL statement to classify.
-     * @return string The identified type of the SQL statement, such as 'SELECT', 'CREATE TABLE', or 'UNKNOWN'.
+     * @param string $sql The SQL string cleaned of comments and unnecessary connectors.
+     * @return array An array containing individual SQL statements, properly ordered.
+     */
+    private static function splitSqlStatements($sql)
+    {
+        $statements = [];
+
+        // Remove common SQL connectors to simplify the remaining string for further processing.
+        $sql = preg_replace('/\b(' . implode('|', self::$ignoreConnectors) . ')\b/i', '', $sql);
+
+        // Patterns to identify complex SQL constructs like stored functions and triggers.
+        $patterns = [
+            '/CREATE\s+FUNCTION\s+[\s\S]+?\$\$[\s\S]*?\$\$\s*LANGUAGE\s*plpgsql\s*;/i', // Matches PostgreSQL-style stored functions.
+            '/CREATE\s+TRIGGER\s+[\s\S]+?EXECUTE\s+PROCEDURE\s+[\s\S]+?;/i' // Matches SQL triggers up to the EXECUTE PROCEDURE part.
+        ];
+
+        // Extract special SQL blocks based on predefined patterns and store their positions for sequential processing.
+        $blocks = [];
+        foreach ($patterns as $pattern) {
+            preg_match_all($pattern, $sql, $matches, PREG_OFFSET_CAPTURE);
+            foreach ($matches[0] as $match) {
+                $blocks[] = ['sql' => $match[0], 'start' => $match[1], 'end' => $match[1] + strlen($match[0])];
+            }
+        }
+
+        // Sort identified blocks to maintain the natural order of SQL statements in the script.
+        usort($blocks, function ($a, $b) {
+            return $a['start'] - $b['start'];
+        });
+
+        // Reconstruct the full list of SQL statements, ensuring all code blocks are integrated in their original order.
+        $lastPos = 0;
+        foreach ($blocks as $block) {
+            // Add SQL code found before each block.
+            $intermediateSql = substr($sql, $lastPos, $block['start'] - $lastPos);
+            $statements = array_merge($statements, self::extractStatements($intermediateSql));
+            // Add the block itself.
+            $statements[] = $block['sql'];
+            $lastPos = $block['end'];
+        }
+
+        // Append any SQL code that follows the last block.
+        $remainingSql = substr($sql, $lastPos);
+        $statements = array_merge($statements, self::extractStatements($remainingSql));
+
+        return $statements;
+    }
+
+    /**
+     * Splits a given SQL string into individual statements based on the semicolon delimiter.
+     *
+     * @param string $sql The segment of SQL code to be split into distinct statements.
+     * @return array An array of cleanly trimmed SQL statements, each terminated with a semicolon.
+     */
+    private static function extractStatements($sql)
+    {
+        $result = [];
+
+        // Use a regex to split the SQL string at semicolons, only if they are not within quotes or comments.
+        foreach (preg_split('/;(?=(?:[^\'"]|\'[^\']*\'|"[^"]*")*$)/', $sql) as $stmt) {
+            $trimmed = trim($stmt);
+            if ($trimmed) {
+                // Ensure each statement ends with a semicolon for correct SQL syntax.
+                $result[] = $trimmed . ';';
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Determines the SQL command type of a given SQL statement by examining its starting keyword.
+     *
+     * @param string $statement The single SQL statement to analyze.
+     * @return string The type of the SQL command (e.g., 'CREATE TABLE', 'DROP INDEX') or 'UNKNOWN' if no match is found.
      */
     private static function detectStatementType($statement)
     {
-        $normalizedStatement = strtoupper(trim(preg_replace('/\s+/', ' ', $statement)));
-        $words = explode(' ', $normalizedStatement);
+        $normalizedStatement = strtoupper(trim($statement));
 
-        // List of simple SQL keywords.
-        $simpleKeywords = [
+        // Define patterns for SQL command types for CREATE, DROP, and ALTER operations.
+        $commandPatterns = [
+            'CREATE' => [
+                'FUNCTION' => '/^CREATE\s+FUNCTION/i',
+                'TRIGGER' => '/^CREATE\s+TRIGGER/i',
+                'TABLE' => '/^CREATE\s+TABLE/i',
+                'INDEX' => '/^CREATE\s+INDEX/i',
+                'SEQUENCE' => '/^CREATE\s+SEQUENCE/i',
+                'VIEW' => '/^CREATE\s+VIEW/i',
+                'DOMAIN' => '/^CREATE\s+DOMAIN/i'
+            ],
+            'DROP' => [
+                'FUNCTION' => '/^DROP\s+FUNCTION/i',
+                'TRIGGER' => '/^DROP\s+TRIGGER/i',
+                'TABLE' => '/^DROP\s+TABLE/i',
+                'INDEX' => '/^DROP\s+INDEX/i',
+                'SEQUENCE' => '/^DROP\s+SEQUENCE/i',
+                'VIEW' => '/^DROP\s+VIEW/i',
+                'DOMAIN' => '/^DROP\s+DOMAIN/i'
+            ],
+            'ALTER' => [
+                'FUNCTION' => '/^ALTER\s+FUNCTION/i',
+                'TRIGGER' => '/^ALTER\s+TRIGGER/i',
+                'TABLE' => '/^ALTER\s+TABLE/i',
+                'INDEX' => '/^ALTER\s+INDEX/i',
+                'SEQUENCE' => '/^ALTER\s+SEQUENCE/i',
+                'VIEW' => '/^ALTER\s+VIEW/i',
+                'DOMAIN' => '/^ALTER\s+DOMAIN/i'
+            ]
+        ];
+
+        // Iterate through the command patterns to find a match for the normalized statement.
+        foreach ($commandPatterns as $command => $patterns) {
+            foreach ($patterns as $type => $pattern) {
+                if (preg_match($pattern, $normalizedStatement)) {
+                    return $command . ' ' . $type; // Return the match as a concatenated string of command and type.
+                }
+            }
+        }
+
+        // List of additional common SQL commands to check.
+        $otherCommands = [
             'SELECT',
             'INSERT',
             'UPDATE',
@@ -74,77 +203,65 @@ class user_query_executor
             'EXECUTE',
             'DECLARE',
             'BEGIN',
-            'COMMIT'
+            'COMMIT',
+            'DROP',
+            'ALTER',
+            'LOCK',
+            'RELEASE'
         ];
 
-        // Check for simple keywords.
-        foreach ($simpleKeywords as $keyword) {
-            if (strpos($normalizedStatement, $keyword) !== false) {
-                return $keyword;
+        // Check for other common SQL keywords.
+        foreach ($otherCommands as $keyword) {
+            if (strpos($normalizedStatement, $keyword) === 0) {
+                return $keyword; // Return the keyword if it matches the beginning of the statement.
             }
         }
 
-        // Mapping of compound keywords and their potential followers.
-        $compoundKeywords = [
-            'CREATE' => ['TABLE', 'VIEW', 'INDEX', 'SCHEMA', 'DATABASE', 'FUNCTION', 'SEQUENCE', 'TRIGGER', 'ROLE', 'EXTENSION', 'DOMAIN'],
-            'DROP' => ['TABLE', 'VIEW', 'INDEX', 'SCHEMA', 'DATABASE', 'FUNCTION', 'SEQUENCE', 'TRIGGER', 'ROLE', 'EXTENSION', 'DOMAIN'],
-            'ALTER' => ['TABLE', 'VIEW', 'INDEX', 'SCHEMA', 'DATABASE', 'FUNCTION', 'SEQUENCE', 'TRIGGER', 'ROLE', 'EXTENSION', 'DOMAIN'],
-            'RELEASE' => ['SAVEPOINT'],
-            'LOCK' => ['TABLE']
-        ];
-
-        // Check for compound keywords.
-        if (count($words) > 1) {
-            foreach ($compoundKeywords as $key => $values) {
-                if ($words[0] == $key) {
-                    foreach ($values as $value) {
-                        if ($words[1] == $value) {
-                            return "$key $value";
-                        }
-                    }
-                }
-            }
-        }
-
-        return 'UNKNOWN'; // Default return value if no known patterns are detected.
+        // Return 'UNKNOWN' if no known SQL command patterns are matched.
+        return 'UNKNOWN';
     }
 
     /**
-     * Executes SQL statements for a specific attempt and schema, handling connections and errors.
+     * Executes SQL statements for a specified attempt and schema, handling database connection and execution.
      *
-     * @param int $attemptid The ID of the attempt for which SQL is executed.
-     * @param string $sql The SQL statement(s) to be executed.
+     * @param int $attemptid The unique identifier of the attempt for which SQL is executed.
+     * @param string $sql The SQL statement or multiple statements to be executed.
      * @param string $schemaName The schema name to set for the execution context.
-     * @return array An array containing results or error information for each statement executed.
-     * @throws moodle_exception Throws exceptions if SQL is empty, credentials are not found, or the database connection fails.
+     * @return array An array containing results or error information for each executed statement.
+     * @throws moodle_exception Throws exceptions for various failures such as empty SQL, missing credentials, or database connection errors.
      */
     public static function execute_user_sql($attemptid, $sql, $schemaName)
     {
         global $DB;
 
+        // Ensure SQL is not empty.
         if (empty($sql)) {
             throw new moodle_exception('emptyquery', 'mod_sqlab');
         }
 
+        // Retrieve attempt and user credentials records.
         $attempt = $DB->get_record('sqlab_attempts', ['id' => $attemptid], '*', MUST_EXIST);
         $credentials = $DB->get_record('sqlab_db_user_credentials', ['userid' => $attempt->userid], '*', MUST_EXIST);
 
+        // Handle missing credentials.
         if (!$credentials) {
             throw new moodle_exception('credentialsnotfound', 'mod_sqlab');
         }
 
+        // Decrypt password and establish database connection.
         $decrypted_password = encoder::decrypt($credentials->password);
         $studentDbName = str_replace("ROLE_", "", $credentials->username);
-
         $dbConnector = new dbconnector($studentDbName, $credentials->username, $decrypted_password);
         $conn = $dbConnector->connect();
 
+        // Handle connection failure.
         if (!$conn) {
             throw new moodle_exception('dbconnectionerror', 'mod_sqlab');
         }
 
         try {
 
+            // Set the search path to the specified schema.
             pg_query($conn, "SET search_path TO \"$schemaName\"");
             pg_send_query($conn, $sql);
 
@@ -152,9 +269,9 @@ class user_query_executor
             $queryTypes = self::detectQueryType($sql);
             $queryIndex = 0;
 
+            // Fetch results for each query executed.
             while ($result = pg_get_result($conn)) {
                 $queryType = $queryTypes[$queryIndex++] ?? 'UNKNOWN';
-
                 $state = pg_result_error_field($result, PGSQL_DIAG_SQLSTATE);
 
                 if ($state) {
@@ -178,6 +295,7 @@ class user_query_executor
             return $combinedResults;
 
         } finally {
+            // Ensure the database connection is closed.
             $dbConnector->closeConnection();
         }
     }
