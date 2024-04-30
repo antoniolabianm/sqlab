@@ -39,11 +39,8 @@ function evaluateCode(evaluate) {
     return response.json();
   })
   .then(data => {
-    // Handle response: log success or error messages.
-    if (data.success) {
-      console.log("Grade updated successfully:", data.message);
-    } else {
-      console.error("Failed to update grade:", data.error);
+    if (!data.success) {
+      console.error("Error handling grades:", data.error);
     }
   })
   .catch(error => {
