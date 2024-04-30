@@ -75,7 +75,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'create_new_attempt') {
 
         // Create the relational schema for each question.
         foreach ($quiz_questions as $question) {
-            internal_sql_executor::execute($USER->id, $question['relationalschema'], $schemaName);
+            internal_sql_executor::execute($USER->id, $question['relationalschema'], $schemaName, false, null, false);
         }
 
         // Prepare the context for each question, inserting data into the relational schema.
