@@ -21,7 +21,7 @@ To install SQLab, you have two options:
 1. Download the latest version of the SQLab plugin.
 2. Extract the plugin folder into your Moodle installation at the following location:
 
-    {your/moodle/dirroot}/mod/
+    `{your/moodle/dirroot}/mod/`
 
 3. Log in to your Moodle site as an administrator.
 4. Navigate to **Site administration > Notifications**. Moodle will automatically detect the plugin and prompt you to complete the installation process.
