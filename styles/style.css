@@ -320,6 +320,13 @@ span.token.comment {
   margin-bottom: 10px;
 }
 
+#executeSqlButton,
+#evaluateSqlButton {
+  padding: 6px 12px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
 /* Styles for the evaluate button code */
 #evaluateSqlButton {
   background-color: #258d19;
