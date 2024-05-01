@@ -42,16 +42,17 @@
 
 .navigation-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
 }
 
 .navigation-buttons .mod_quiz-prev-nav {
-  margin-right: auto;
+  margin-left: 127px;
 }
 
 .navigation-buttons .mod_quiz-next-nav {
   margin-left: auto;
+  margin-right: -233px;
 }
 
 /* Styles for tables that are output when executing code */
@@ -367,6 +368,7 @@ span.token.comment {
   border-radius: 8px;
   overflow: hidden;
   margin-left: 15px;
+  margin-bottom: 65px;
 }
 
 #question-nav h5 {
