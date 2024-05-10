@@ -56,7 +56,7 @@ $string['invalidattemptid'] = 'El intento al que intenta acceder no existe o ya 
 $string['missingparam'] = 'Falta información necesaria. Por favor, contacte a soporte si el problema persiste.';
 $string['missingparameters'] = 'Faltan algunos parámetros requeridos. Por favor, verifica tu entrada e intenta de nuevo.';
 $string['invalidrequestmethod'] = 'El método de solicitud no es compatible con este punto de acceso. Por favor, utiliza POST.';
-$string['errorprocessattempt'] = 'Se produjo un error al procesar tu intento. Por favor, intenta nuevamente o contacta al soporte si el problema persiste.';
+$string['errorprocessattempt'] = 'Se produjo un error al procesar su intento. Por favor, inténtelo de nuevo o contacte con soporte si el problema persiste.';
 $string['noattemptid'] = 'No se proporcionó un ID de intento. Por favor, contacte a soporte si el problema persiste.';
 $string['notyourattempt'] = 'No tiene permiso para acceder a este intento. Si cree que esto es un error, por favor contacte a soporte.';
 $string['invalidsqlabid'] = 'La actividad SQLab a la que intentas acceder no existe o ha sido eliminada. Si cree que esto es un error, por favor contacte a soporte.';
@@ -66,6 +66,16 @@ $string['questionnotfound'] = 'La pregunta solicitada no pudo ser encontrada. Pu
 $string['nomoreattempts'] = 'Has alcanzado el número máximo de intentos para esta actividad.';
 $string['nosqlcode'] = 'No se proporcionó código SQL. Por favor, contacte al soporte si el problema persiste.';
 $string['noevaluate'] = 'Falta el parámetro de evaluación. Por favor, contacte al soporte si el problema persiste.';
+$string['error_details'] = '<br><br>&nbsp;&nbsp;&nbsp; • Detalles:';
+$string['view_names_not_found'] = 'No se pudieron encontrar los nombres de las vistas en la consulta.';
+$string['sql_file_not_exist'] = 'El archivo SQL no existe en la ruta especificada: {$a}';
+$string['unable_to_load_sql'] = 'No se pudo cargar la definición de la función del archivo SQL.';
+$string['function_creation_failed'] = 'Error al crear la función: {$a}';
+$string['attemptnotfound'] = 'Intento no encontrado.';
+$string['sqlabnotfound'] = 'Instancia de SQLab no encontrada.';
+$string['schemanameerror'] = 'Error al formatear el nombre del esquema.';
+$string['nocredentials'] = 'No se encontraron credenciales para el usuario.';
+$string['dbconnectionerror'] = 'No se puede conectar a la base de datos para la instancia de SQLab.';
 
 // Configuración y Configuración
 $string['quizid'] = 'ID del Cuestionario';

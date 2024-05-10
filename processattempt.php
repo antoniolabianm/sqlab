@@ -67,13 +67,20 @@ try {
 
 } catch (Exception $e) {
 
-    // Notify the user that an error occurred while the attempt was being processed.
-    \core\notification::error(get_string('errorprocessattempt', 'sqlab'));
+    // Extract the error message and process it to remove "ERROR: " if present and get a cleaner message.
+    $detailedMessage = $e->getMessage();
+    if (strpos($detailedMessage, "ERROR: ") === 0) {
+        $detailedMessage = substr($detailedMessage, 7);
+    }
 
-    // Define a redirection URL in case of error to view.
+    // Notify the user that an error occurred during the processing of the attempt, including details of the error.
+    $errorMessage = get_string('errorprocessattempt', 'sqlab') . get_string('error_details', 'sqlab') . " " . htmlspecialchars($detailedMessage);
+    \core\notification::error($errorMessage, 'html');
+
+    // Define a redirection URL in case of error.
     $redirectUrl = new moodle_url('/mod/sqlab/view.php', ['id' => $cmid]);
 
-    // Redirect user to view where they can get support or try again.
+    // Redirect the user to the view where they can get support or try again.
     redirect($redirectUrl);
 
 }

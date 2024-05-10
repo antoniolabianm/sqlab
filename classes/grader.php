@@ -10,7 +10,8 @@ class grader
      * Grades a specific attempt based on its ID by evaluating the answers to its associated questions.
      *
      * @param int $attemptid The ID of the attempt to grade.
-     * @throws moodle_exception Throws exceptions for database connection errors, missing credentials, or other database-related errors.
+     * @throws \moodle_exception Throws moodle_exception for specific errors controlled by the application.
+     * @throws \Exception Throws generic Exception for uncontrolled or external errors.
      */
     public static function gradeAttempt($attemptid)
     {
@@ -19,7 +20,7 @@ class grader
         // Load the attempt details.
         $attempt = $DB->get_record('sqlab_attempts', ['id' => $attemptid]);
         if (!$attempt) {
-            throw new \moodle_exception('attemptnotfound', 'sqlab', '', "Attempt not found with ID {$attemptid}");
+            throw new \moodle_exception('attemptnotfound', 'sqlab');
         }
 
         // Retrieve the responses for the attempt.
@@ -28,19 +29,19 @@ class grader
         // Load the SQLab instance data.
         $sqlab = $DB->get_record('sqlab', ['id' => $attempt->sqlabid]);
         if (!$sqlab) {
-            throw new \moodle_exception('sqlabnotfound', 'sqlab', '', "SQLab instance not found with ID {$sqlab->id}");
+            throw new \moodle_exception('sqlabnotfound', 'sqlab');
         }
 
         // Validate the schema name.
         $schemaName = schema_manager::format_activity_name($sqlab->name);
         if (empty($schemaName)) {
-            throw new \moodle_exception('schemanameerror', 'sqlab', '', "Error formatting schema name for SQLab ID {$sqlab->id}");
+            throw new \moodle_exception('schemanameerror', 'sqlab');
         }
 
         // Prepare database connection using user's specific credentials.
         $userCredentials = $DB->get_record('sqlab_db_user_credentials', ['userid' => $attempt->userid]);
         if (!$userCredentials) {
-            throw new \moodle_exception('nocredentials', 'sqlab', '', "No credentials found for user ID {$attempt->userid}");
+            throw new \moodle_exception('nocredentials', 'sqlab');
         }
 
         $studentDbName = str_replace("ROLE_", "", $userCredentials->username);
@@ -48,7 +49,7 @@ class grader
         $studentDBConnection = $dbConnector->connect();
 
         if (!$studentDBConnection) {
-            throw new \moodle_exception('dbconnectionerror', 'sqlab', '', "Cannot connect to database for SQLab instance with ID {$sqlab->id}");
+            throw new \moodle_exception('dbconnectionerror', 'sqlab');
         }
 
         try {
@@ -84,8 +85,7 @@ class grader
             $deleteSchema = true;
 
         } catch (\Exception $e) {
-            // Handle exceptions by logging and rethrowing a Moodle-specific exception.
-            throw new \moodle_exception('dberror', 'sqlab', '', "Transaction failed on attempt ID {$attemptid}: " . $e->getMessage());
+            throw new \Exception($e->getMessage());
         } finally {
             // Conditionally drop the schema if all operations were successful.
             if ($deleteSchema) {
@@ -105,7 +105,8 @@ class grader
      * @param string $schemaName The name of the database schema where the queries are to be executed.
      * @param stdClass $sqlab Instance data containing quiz and question identifiers.
      * @return array Returns an array with 'grade' and 'feedback' keys.
-     * @throws moodle_exception Throws exceptions if quiz questions are not found, the specific question is not available, or any database errors occur.
+     * @throws \moodle_exception Throws moodle_exception for specific errors controlled by the application.
+     * @throws \Exception Throws generic Exception for uncontrolled or external errors.
      */
     protected static function gradeQuestion($dbConnection, $response, $schemaName, $sqlab)
     {
@@ -131,7 +132,7 @@ class grader
         }
 
         if (!$question) {
-            throw new \moodle_exception('questionnotfound', 'sqlab', '', "No question found for question ID {$response->questionid}");
+            throw new \moodle_exception('questionnotfound', 'sqlab');
         }
 
         // Calculate the total penalty for executions.
@@ -166,7 +167,7 @@ class grader
 
         if (!$result) {
             $error = pg_last_error($dbConnection);
-            throw new \moodle_exception('dberror', 'sqlab', '', "Comparison failed: $error");
+            throw new \Exception($error);
         }
 
         // Using regular expression to extract view names.
@@ -175,7 +176,7 @@ class grader
             $view2 = $matches[2];
         } else {
             // Throw an exception if the names of the views could not be extracted from the query.
-            throw new \moodle_exception("The names of the views could not be found in the query.");
+            throw new \moodle_exception('view_names_not_found', 'sqlab');
         }
 
         $allRowsCorrect = true; // Initialize flag to true, assuming all rows are initially correct.
@@ -238,6 +239,7 @@ class grader
      * If the function does not exist, it is created from an SQL file.
      *
      * @param resource $dbConnection The database connection resource.
+     * @throws \moodle_exception Throws moodle_exception for specific errors controlled by the application.
      */
     protected static function generateEvaluatorFunction($dbConnection)
     {
@@ -246,19 +248,19 @@ class grader
 
         // Check if the SQL file exists and throw an exception if not.
         if (!file_exists($functionSqlPath)) {
-            throw new \Exception("SQL file does not exist at the specified path: {$functionSqlPath}");
+            throw new \moodle_exception('sql_file_not_exist', 'sqlab', '', null, $functionSqlPath);
         }
 
         // Load the SQL query from the file.
         $functionSql = file_get_contents($functionSqlPath);
         if (!$functionSql) {
-            throw new \Exception("Unable to load function definition from the SQL file.");
+            throw new \moodle_exception('unable_to_load_sql', 'sqlab');
         }
 
         // Create or replace the function in the database.
         $createFunction = pg_query($dbConnection, $functionSql);
         if (!$createFunction) {
-            throw new \Exception("Failed to create function: " . pg_last_error($dbConnection));
+            throw new \moodle_exception('function_creation_failed', 'sqlab', '', null, pg_last_error($dbConnection));
         }
     }
 }

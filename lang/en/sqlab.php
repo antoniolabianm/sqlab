@@ -66,6 +66,16 @@ $string['questionnotfound'] = 'The requested question could not be found. It may
 $string['nomoreattempts'] = 'You have reached the maximum number of attempts for this activity.';
 $string['nosqlcode'] = 'No SQL code was provided. Please contact support if the issue persists.';
 $string['noevaluate'] = 'Evaluation parameter is missing. Please contact support if the issue persists.';
+$string['error_details'] = '<br><br>&nbsp;&nbsp;&nbsp; • Details:';
+$string['view_names_not_found'] = 'The names of the views could not be found in the query.';
+$string['sql_file_not_exist'] = 'SQL file does not exist at the specified path: {$a}';
+$string['unable_to_load_sql'] = 'Unable to load function definition from the SQL file.';
+$string['function_creation_failed'] = 'Failed to create function: {$a}';
+$string['attemptnotfound'] = 'Attempt not found.';
+$string['sqlabnotfound'] = 'SQLab instance not found.';
+$string['schemanameerror'] = 'Error formatting schema name.';
+$string['nocredentials'] = 'No credentials found for the user.';
+$string['dbconnectionerror'] = 'Cannot connect to the database for the SQLab instance.';
 
 // Configuration and Setup
 $string['quizid'] = 'Quiz ID';
