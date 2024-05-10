@@ -74,6 +74,12 @@ $PAGE->set_title(format_string($sqlab->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 
+$formatoptions = new stdClass;
+$formatoptions->noclean = true; // This allows the HTML not to be cleaned up.
+$formatoptions->overflowdiv = true; // This ensures that long content is handled correctly.
+$formatoptions->context = $context; // The current context for applying appropriate permissions.
+$formatoptions->filter = false; // Disables filter processing for this call.
+
 // Including JavaScript files for syntax highlighting and custom JavaScript.
 $PAGE->requires->js(new moodle_url('https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js'), true);
 $PAGE->requires->js(new moodle_url('https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-sql.min.js'), true);
@@ -196,7 +202,7 @@ foreach ($questions as $question) {
     echo '      </div>';
     echo '      <div class="content">';
     echo '          <div class="formulation clearfix">';
-    echo '              <div>' . format_text($question['statement'], FORMAT_HTML) . '</div>';
+    echo '              <div>' . format_text($question['statement'], FORMAT_MOODLE, $formatoptions) . '</div>';
     echo '              <div class="accordion-container">';
     echo '                  <h2 class="accordion-title">' . get_string('userresponsereview', 'sqlab') . '</h2>';
     echo '                  <div class="accordion-content">';
