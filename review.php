@@ -231,5 +231,15 @@ foreach ($questions as $question) {
 $reviewUrl = new moodle_url('/mod/sqlab/view.php', array('id' => $cmid));
 echo ' <div class="submitbtns" style="text-align: right;"><a class="mod_quiz-next-nav" href="' . $reviewUrl->out() . '">' . get_string('finishreview', 'sqlab') . '</a></div>';
 
+// Delete the answers stored in localStorage for this attempt.
+echo "<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var questionIds = " . json_encode(array_column($questions, 'questionid')) . ";
+    questionIds.forEach(function(questionId) {
+        localStorage.removeItem('response_' + questionId);
+    });
+});
+</script>";
+
 // Output the standard Moodle page footer.
 echo $OUTPUT->footer();

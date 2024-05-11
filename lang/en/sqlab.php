@@ -7,6 +7,8 @@ $string['pluginname'] = 'SQLab';
 $string['modulename'] = 'SQLab';
 $string['modulenameplural'] = 'SQLabs';
 $string['pluginadministration'] = 'SQLab Administration';
+$string['privacy:metadata'] = 'The SQLab plugin does not store personal data.';
+$string['privacy:metadata:preference:description'] = 'Your personal settings for SQLab, such as user interface customizations.';
 
 // Status and Navigation
 $string['nosqlabs'] = 'No SQLab instances';
@@ -76,6 +78,7 @@ $string['sqlabnotfound'] = 'SQLab instance not found.';
 $string['schemanameerror'] = 'Error formatting schema name.';
 $string['nocredentials'] = 'No credentials found for the user.';
 $string['dbconnectionerror'] = 'Cannot connect to the database for the SQLab instance.';
+$string['nocmid'] = 'No course module ID was provided. Please contact support if the issue persists.';
 
 // Configuration and Setup
 $string['quizid'] = 'Quiz ID';
