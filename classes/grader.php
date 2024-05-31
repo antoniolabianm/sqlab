@@ -212,7 +212,7 @@ class grader
                 "<th class='sql-results-header'>" . get_string('expected_answer', 'sqlab') . "</th>\n" .
                 "</tr>\n";
 
-            // Add rows to the table,
+            // Add rows to the table.
             foreach ($rows as $rowHtml) {
                 $feedbackDetails[] = $rowHtml;
             }

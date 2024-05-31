@@ -6,7 +6,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class encoder
 {
-    private static $key = 'secret_key'; // Secret key for encryption. Should be stored securely and not hardcoded in production.
+    private static $key = 'aN67haft53jkas4dH8L';
 
     /**
      * Encrypts data using AES-256-CBC encryption.

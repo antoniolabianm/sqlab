@@ -5,8 +5,6 @@ require_once dirname(__FILE__) . '/../../config.php';
 require_once dirname(__FILE__) . '/lib.php';
 use mod_sqlab\attempt_manager;
 
-// echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-
 try {
 
     // Fetch and validate the necessary parameter from the request.
@@ -43,29 +41,6 @@ try {
     exit;
 
 }
-
-// } catch (moodle_exception $e) {
-//     $redirectUrl = (!empty($course->id)) ? new moodle_url('/course/view.php', ['id' => $course->id]) : new moodle_url('/my/');
-//     $redirectUrl = $redirectUrl->out(false);
-
-//     $errorMsg = get_string($e->errorcode, $e->module);
-
-//     echo "<script type='text/javascript'>
-//             document.addEventListener('DOMContentLoaded', function() {
-//                 Swal.fire({
-//                     icon: 'error',
-//                     title: 'Oops...',
-//                     text: " . json_encode($errorMsg) . ",
-//                     confirmButtonText: 'Continue'
-//                 }).then((result) => {
-//                 if (result.value) {
-//                     window.location.href = '{$redirectUrl}';
-//                 }
-//             });
-//         });
-//     </script>";
-//     exit;
-// }
 
 // Enforce user login, course module context and check capabilities.
 $context = context_module::instance($cm->id);
@@ -151,20 +126,25 @@ if ($attempts) {
 
     foreach ($attempts as $attempt) {
         $state = attempt_manager::check_attempt_state($attempt->id);
+
         $reviewCellContent = $state === attempt_manager::FINISHED ?
             html_writer::link(
                 new moodle_url('/mod/sqlab/review.php', array('attempt' => $attempt->id, 'cmid' => $cmid)),
                 get_string('reviewlinktext', 'sqlab')
             ) : '-';
 
+        $gradeCellContent = $state === attempt_manager::FINISHED ?
+            format_float($attempt->sumgrades, 2) : '-';
+
         $row = new html_table_row(
             array(
                 $attempt->attempt,
                 get_string($state, 'sqlab'),
-                format_float($attempt->sumgrades, 2),
+                $gradeCellContent,
                 $reviewCellContent
             )
         );
+
         $table->data[] = $row;
     }
 

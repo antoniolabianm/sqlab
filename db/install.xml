@@ -13,9 +13,6 @@
         <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Foreign key that refers to the course this record belongs to."/>
         <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name of the instance (Exercise 1, Practice 7...)."/>
         <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the quiz that SQLab will use to obtain the questions."/>
-        <!-- <FIELD NAME="startdate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date the SQLab will be avaliable."/> -->
-        <!-- <FIELD NAME="duedate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="After this date this SQLab instance will not be available."/> -->
-        <!-- <FIELD NAME="visiblegrade" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="0 visible grade no, 1 yes."/> -->
         <FIELD NAME="activitypassword" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Password required to start the activity."/>
       </FIELDS>
 
@@ -25,7 +22,6 @@
 
       <INDEXES>
         <INDEX NAME="course_idx" UNIQUE="false" FIELDS="course"/>
-        <!-- <INDEX NAME="startdate_indx" UNIQUE="false" FIELDS="startdate"/> -->
       </INDEXES>
       
     </TABLE>

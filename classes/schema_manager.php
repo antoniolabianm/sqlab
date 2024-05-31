@@ -11,8 +11,7 @@ class schema_manager
      *
      * @param int $attemptid The ID of the user's attempt.
      * @param int $userid The ID of the user.
-     * @throws \moodle_exception Throws exceptions if the attempt, activity, user credentials, or database connection
-     *                           cannot be found or established.
+     * @throws \moodle_exception Throws exceptions if the attempt, activity, user credentials, or database connection cannot be found or established.                          
      */
     public static function handle_first_attempt($attemptid, $userid)
     {

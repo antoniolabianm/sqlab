@@ -133,31 +133,31 @@ $valueStyle = 'background-color: #fafafa; white-space: nowrap;';
 $table->data = array(
     new html_table_row(
         array(
-            new html_table_cell(get_string('startedon', 'mod_sqlab')),
+            new html_table_cell(get_string('startedon', 'sqlab')),
             new html_table_cell(userdate($attempt->timestart))
         )
     ),
     new html_table_row(
         array(
-            new html_table_cell(get_string('state', 'mod_sqlab')),
-            new html_table_cell($attempt->timefinish ? get_string('finished', 'mod_sqlab') : get_string('inprogress', 'mod_sqlab'))
+            new html_table_cell(get_string('state', 'sqlab')),
+            new html_table_cell($attempt->timefinish ? get_string('finished', 'sqlab') : get_string('inprogress', 'sqlab'))
         )
     ),
     new html_table_row(
         array(
-            new html_table_cell(get_string('completedon', 'mod_sqlab')),
+            new html_table_cell(get_string('completedon', 'sqlab')),
             new html_table_cell(userdate($attempt->timefinish))
         )
     ),
     new html_table_row(
         array(
-            new html_table_cell(get_string('timetaken', 'mod_sqlab')),
+            new html_table_cell(get_string('timetaken', 'sqlab')),
             new html_table_cell(format_time($attempt->timefinish - $attempt->timestart))
         )
     ),
     new html_table_row(
         array(
-            new html_table_cell(get_string('grade', 'mod_sqlab')),
+            new html_table_cell(get_string('grade', 'sqlab')),
             new html_table_cell($gradeSummary)
         )
     ),

@@ -2,11 +2,11 @@
 
 namespace mod_sqlab\privacy;
 
+defined('MOODLE_INTERNAL') || die();
+
 use core_privacy\local\metadata\null_provider;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\user_preference_provider;
-use core_privacy\local\request\contextlist;
-use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\writer;
 
 /**
@@ -54,7 +54,7 @@ class provider implements null_provider, user_preference_provider {
                 'mod_sqlab',
                 $preference_name,
                 $preference_value,
-                get_string('privacy:metadata:preference:description', 'mod_sqlab')
+                get_string('privacy:metadata:preference:description', 'sqlab')
             );
         }
     }

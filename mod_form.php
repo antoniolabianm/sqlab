@@ -29,30 +29,6 @@ class mod_sqlab_mod_form extends moodleform_mod
         $mform->setDefault('quizid', ''); // Default value.
         $mform->addHelpButton('quizid', 'quizid_help', 'sqlab'); // Help button.
 
-        // 'Submission period' header.
-        // $mform->addElement('header', 'submissionperiod', get_string('submissionperiod', 'sqlab'));
-
-        // Calculations for setting a date for selectors.
-        // $secondsday = 24 * 60 * 60;
-        // $now = time();
-        // $inittime = round($now / $secondsday) * $secondsday + 5 * 60;
-        // $endtime = $inittime + (8 * $secondsday) - 5 * 60;
-
-        // 'Available from' selector.
-        // $mform->addElement('date_time_selector', 'startdate', get_string('startdate', 'sqlab'), ['optional' => true]);
-        // $mform->setDefault('startdate', 0);
-
-        // 'Submission deadline' selector.
-        // $mform->addElement('date_time_selector', 'duedate', get_string('duedate', 'sqlab'), ['optional' => true]);
-        // $mform->setDefault('duedate', $endtime);
-
-        // 'Grade' header.
-        // $this->standard_grading_coursemodule_elements();
-
-        // 'Show grade' selector.
-        // $mform->addElement('selectyesno', 'visiblegrade', get_string('visiblegrade', 'sqlab'));
-        // $mform->setDefault('visiblegrade', 1);
-
         // 'Security' header.
         $mform->addElement('header', 'securitysettings', get_string('securitysettings', 'sqlab'));
 

@@ -1,17 +1,18 @@
 # SQLab #
 
-SQLab is an educational tool for Moodle that enables instructors and students to interact with PostgreSQL databases. It provides a hands-on learning platform similar to tools like CodeRunner or VPL, but is specifically designed for SQL database management and querying exercises.
+SQLab is a Moodle plugin that adds an Integrated Development Environment (IDE) for PostgreSQL databases. It provides a hands-on learning platform specifically designed for SQL database management and query exercises, enhancing the learning experience for students and offering robust tools for teachers to manage and assess SQL assignments.
 
-**Version**: 4.5.7 - 30 April 2024.
+**Version**: 4.5.8 - 01 June 2024.
 
 **Author**: José Fernández Carmona, University of Castilla - La Mancha, Spain.
 
 ## Features ##
 
-- **Isolated Environments**: Each student works within a dedicated schema, ensuring that their work is sandboxed from others.
-- **Real-time SQL Execution**: Students can execute SQL commands and see immediate results, enhancing the learning experience.
-- **Automatic Grading**: The plugin supports automatic grading based on predefined correct SQL queries.
-- **Error Handling**: Provides robust error feedback to help students learn from their mistakes.
+- **Integrated Development Environment (IDE)**: A complete IDE within Moodle that allows students to write and execute SQL queries directly in PostgreSQL.
+- **Isolated Environments**: Each student operates within a dedicated database, ensuring that their work is isolated from others, promoting a safe and personalized learning experience.
+- **Real-time SQL Execution**: Students can execute SQL commands and see the results immediately, facilitating an interactive and dynamic learning environment.
+- **Automatic Grading**: The plugin includes automatic grading capabilities, allowing teachers to set predefined SQL queries used to evaluate student submissions.
+- **Error Feedback**: Provides detailed error feedback to help students understand and learn from their mistakes, improving their SQL skills.
 
 ## Installation ##
 
@@ -34,7 +35,7 @@ To install SQLab, you have two options:
 
 ## Usage ##
 
-Instructors can create assignments or tests directly within Moodle using SQLab. Each assignment can specify the SQL commands or scripts that students need to execute or correct. The plugin evaluates submissions automatically against the correct answers specified by the instructor.
+Teachers can create assignments or quizzes directly within Moodle using the [SQLQuestion question type](https://github.com/NikolayP12/sqlquestion). SQLab reads these SQLQuestion elements to determine the questions and exercises for each activity. Within SQLQuestion, teachers can configure all the necessary parameters for assessment and exercise creation. This integration ensures that SQLab activities are fully customized to meet the specific learning objectives and assessment criteria set by the teacher.
 
 ## License ##
 

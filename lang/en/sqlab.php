@@ -1,7 +1,7 @@
 <?php
 // Strings for the component 'mod_sqlab', language 'en'.
 
-// General Module Information
+// General module information.
 $string['sqlab'] = 'SQLab';
 $string['pluginname'] = 'SQLab';
 $string['modulename'] = 'SQLab';
@@ -10,7 +10,7 @@ $string['pluginadministration'] = 'SQLab Administration';
 $string['privacy:metadata'] = 'The SQLab plugin does not store personal data.';
 $string['privacy:metadata:preference:description'] = 'Your personal settings for SQLab, such as user interface customizations.';
 
-// Status and Navigation
+// Status and navigation.
 $string['nosqlabs'] = 'No SQLab instances';
 $string['state'] = 'Status';
 $string['inprogress'] = 'In progress';
@@ -20,7 +20,7 @@ $string['previouspage'] = 'Previous page';
 $string['nextpage'] = 'Next page';
 $string['returntoattempt'] = 'Return to attempt';
 
-// User Interaction
+// User interaction.
 $string['attempt'] = 'Attempt';
 $string['continueattempt'] = 'Continue last attempt';
 $string['startnewattempt'] = 'Start a new attempt';
@@ -28,7 +28,7 @@ $string['previousattempts'] = 'Previous attempts';
 $string['finishattempt'] = 'Finish attempt...';
 $string['submitandfinish'] = 'Submit all and finish';
 
-// Question and Answer Management
+// Question and answer management.
 $string['question'] = 'Question';
 $string['saved'] = 'Saved answer';
 $string['notsaved'] = 'Not yet answered';
@@ -37,13 +37,13 @@ $string['noresponseprovided'] = '-- No response has been provided.';
 $string['userresponsereview'] = 'Your answer';
 $string['solutionreview'] = 'Solution';
 
-// Permissions and Roles
+// Permissions and roles.
 $string['sqlab:addinstance'] = 'Add a new SQLab';
 $string['sqlab:view'] = 'View SQLab';
 $string['sqlab:manage'] = 'Manage SQLab';
 $string['sqlab:attempt'] = 'Allow the user to attempt the SQLab activity';
 
-// Grading and Attempts
+// Grading and attempts.
 $string['attemptsummary'] = 'Summary of the attempt';
 $string['gradesummary'] = '<strong>{$a->obtained}</strong> out of {$a->total} (<strong>{$a->percentage}</strong>%)';
 $string['gradereview'] = 'Grade: {$a->usergrade}/{$a->totalgrade}';
@@ -51,7 +51,7 @@ $string['permittedattempts'] = 'Allowed attempts: ';
 $string['unlimitedattempts'] = 'Unlimited attempts.';
 $string['grade'] = 'Grade';
 
-// Errors and System Messages
+// Errors and system messages.
 $string['invalidcoursemodule'] = 'The activity you are trying to access does not exist. Please contact support if the issue persists.';
 $string['invalidcourseid'] = 'The course you are trying to access does not exist. Please contact support if the issue persists.';
 $string['invalidattemptid'] = 'The attempt you are trying to access does not exist or is no longer available. If you believe this is an error, please contact support.';
@@ -80,7 +80,7 @@ $string['nocredentials'] = 'No credentials found for the user.';
 $string['dbconnectionerror'] = 'Cannot connect to the database for the SQLab instance.';
 $string['nocmid'] = 'No course module ID was provided. Please contact support if the issue persists.';
 
-// Configuration and Setup
+// Configuration and setup.
 $string['quizid'] = 'Quiz ID';
 $string['quizid_help'] = 'Retrieving the ID of the Quiz with SQL questions';
 $string['quizid_help_help'] = 'To properly configure SQLab, you need to enter the ID of a Quiz with SQL questions that you want SQLab to use. Each quiz has a unique ID associated with it. This ID is essential for SQLab to find and load the SQL questions you want to use.';
@@ -88,7 +88,7 @@ $string['submissionperiod'] = 'Submission period';
 $string['startdate'] = 'Available from';
 $string['duedate'] = 'Submission deadline';
 
-// Security and Access Control
+// Security and access control.
 $string['securitysettings'] = 'Security';
 $string['activitypassword'] = 'Activity password';
 $string['sqlabpasswordrequired'] = 'To access this SQLab you need to know the password.';
@@ -100,8 +100,9 @@ $string['passwordincorrect'] = 'Incorrect password.';
 $string['passwordempty'] = 'Please enter a password.';
 $string['unexpectederror'] = 'An unexpected error occurred.';
 $string['ajaxerror'] = 'AJAX request error.';
+$string['sqlsyntaxerror'] = 'Unable to continue due to syntax errors in your SQL code evaluations. Please correct it and try again.';
 
-// Reviews and Feedback
+// Reviews and feedback.
 $string['review'] = 'Review';
 $string['reviewlinktext'] = 'Review attempt';
 $string['startedon'] = 'Started on';
@@ -111,7 +112,7 @@ $string['reviewgrade'] = 'Grade';
 $string['finishreview'] = 'Finish review';
 $string['feedbackreview'] = 'Feedback';
 
-// Activity Interface Customization
+// Activity interface customization.
 $string['name'] = 'Activity name';
 $string['editorthemes'] = 'Editor themes';
 $string['fontsize'] = 'Font size';
@@ -123,7 +124,7 @@ $string['sqlresults'] = 'Expected results';
 $string['relatedconcepts'] = 'Related concepts';
 $string['hints'] = 'Hints';
 
-// Feedback
+// Feedback.
 $string['yes'] = 'Yes';
 $string['no'] = 'No';
 $string['not_present'] = 'Not present';

@@ -47,8 +47,6 @@ function sqlab_supports($feature)
 function sqlab_add_instance($data)
 {
     global $DB;
-    // global $CFG;
-    // require_once ($CFG->dirroot . '/calendar/lib.php');
 
     $data->timecreated = time();
     $data->timemodified = $data->timecreated;
@@ -58,24 +56,6 @@ function sqlab_add_instance($data)
     }
 
     $id = $DB->insert_record('sqlab', $data);
-
-    // if ($data->duedate) {
-    //     $event = new stdClass();
-    //     $event->name = $data->name;
-    //     $event->description = isset($data->intro) ? $data->intro : '';
-    //     $event->format = FORMAT_PLAIN;
-    //     $event->courseid = $data->course;
-    //     $event->groupid = 0;
-    //     $event->userid = 0;
-    //     $event->modulename = 'sqlab';
-    //     $event->instance = $id;
-    //     $event->timestart = $data->duedate;
-    //     $event->timesort = $data->duedate;
-    //     $event->timeduration = 0;
-    //     $event->priority = null;
-
-    //     calendar_event::create($event);
-    // }
 
     return $id;
 }
@@ -90,8 +70,6 @@ function sqlab_add_instance($data)
 function sqlab_update_instance($data)
 {
     global $DB;
-    // global $CFG;
-    // require_once ($CFG->dirroot . '/calendar/lib.php');
 
     if (empty($data->instance)) {
         throw new coding_exception('Instance ID is missing');
@@ -102,24 +80,6 @@ function sqlab_update_instance($data)
     $data->timemodified = time();
 
     $DB->update_record('sqlab', $data);
-
-    // if (isset($data->duedate)) {
-    //     $eventdata = [
-    //         'eventtype' => 'sqlabdue',
-    //         'modulename' => 'sqlab',
-    //         'instance' => $data->id,
-    //         'timestart' => $data->duedate,
-    //         'name' => $data->name
-    //     ];
-
-    //     $event = $DB->get_record('event', ['modulename' => 'sqlab', 'instance' => $data->id]);
-    //     if ($event) {
-    //         $calendarevent = calendar_event::load($event->id);
-    //         $calendarevent->update($eventdata);
-    //     } else {
-    //         calendar_event::create($eventdata);
-    //     }
-    // }
 
     return true;
 }

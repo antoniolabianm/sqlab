@@ -82,7 +82,7 @@ echo $OUTPUT->header();
 
 // Display the name of the activity and a descriptive title of the page.
 echo $OUTPUT->heading(format_string($sqlab->name), 2);
-echo $OUTPUT->heading(get_string('attemptsummary', 'mod_sqlab'), 3);
+echo $OUTPUT->heading(get_string('attemptsummary', 'sqlab'), 3);
 
 // Get the related quiz questions.
 $quiz_questions = sqlab_get_quiz_questions($sqlab->quizid);
@@ -99,7 +99,7 @@ echo ' <div style="margin-top: 20px;">';
 
 // Table to show the summary of the questions of the attempt.
 $table = new html_table();
-$table->head = array(get_string('question', 'mod_sqlab'), get_string('state', 'mod_sqlab'));
+$table->head = array(get_string('question', 'sqlab'), get_string('state', 'sqlab'));
 
 foreach ($quiz_questions as $index => $question) {
 
@@ -127,7 +127,7 @@ echo ' <div style="margin-top: 10px; text-align: start;">';
 $last_question_index = count($quiz_questions) - 1;
 
 // Button to return to the attempt.
-echo ' <a href="' . new moodle_url('/mod/sqlab/attempt.php', array('attempt' => $attemptid, 'cmid' => $cmid, 'page' => $last_question_index)) . '" class="mod_quiz-prev-nav btn btn-secondary" style="margin-right: 15px;">' . get_string('returntoattempt', 'mod_sqlab') . '</a>';
+echo ' <a href="' . new moodle_url('/mod/sqlab/attempt.php', array('attempt' => $attemptid, 'cmid' => $cmid, 'page' => $last_question_index)) . '" class="mod_quiz-prev-nav btn btn-secondary" style="margin-right: 15px;">' . get_string('returntoattempt', 'sqlab') . '</a>';
 
 // Fetch the latest 'evaluate' action record for the given attempt and user.
 $latest_eval = $DB->get_record_sql(
@@ -141,13 +141,13 @@ $latest_eval = $DB->get_record_sql(
 
 // Check if the latest evaluation contains SQL syntax errors.
 if (!empty($latest_eval) && strpos($latest_eval->received_reply, 'ERROR:') !== false) {
-    echo '<div style="color: red; margin-top: 20px;">Cannot proceed due to SQL syntax errors in your last evaluation. Please correct and try again.</div>';
+    echo '<div style="color: red; margin-top: 20px;">' . get_string('sqlsyntaxerror', 'sqlab') . '</div>';
     echo $OUTPUT->footer();
     exit;
 }
 
 // Button to send and end the attempt.
-echo ' <a href="' . new moodle_url('/mod/sqlab/processattempt.php', array('attempt' => $attemptid, 'cmid' => $cmid)) . '" class="mod_quiz-next-nav btn btn-primary">' . get_string('submitandfinish', 'mod_sqlab') . '</a>';
+echo ' <a href="' . new moodle_url('/mod/sqlab/processattempt.php', array('attempt' => $attemptid, 'cmid' => $cmid)) . '" class="mod_quiz-next-nav btn btn-primary">' . get_string('submitandfinish', 'sqlab') . '</a>';
 
 echo ' </div>'; // Close button div.
 

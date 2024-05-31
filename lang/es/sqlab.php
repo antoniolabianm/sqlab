@@ -1,7 +1,7 @@
 <?php
 // Cadenas para el componente 'mod_sqlab', idioma 'es'.
 
-// Información General del Módulo
+// Información general del módulo.
 $string['sqlab'] = 'SQLab';
 $string['pluginname'] = 'SQLab';
 $string['modulename'] = 'SQLab';
@@ -10,7 +10,7 @@ $string['pluginadministration'] = 'Administración de SQLab';
 $string['privacy:metadata'] = 'El plugin SQLab no almacena datos personales.';
 $string['privacy:metadata:preference:description'] = 'Tus ajustes personales para SQLab, como personalizaciones de la interfaz de usuario.';
 
-// Estado y Navegación
+// Estado y navegación.
 $string['nosqlabs'] = 'No hay instancias de SQLab';
 $string['state'] = 'Estado';
 $string['inprogress'] = 'En curso';
@@ -20,7 +20,7 @@ $string['previouspage'] = 'Página anterior';
 $string['nextpage'] = 'Siguiente página';
 $string['returntoattempt'] = 'Volver al intento';
 
-// Interacción del Usuario
+// Interacción del usuario.
 $string['attempt'] = 'Intento';
 $string['continueattempt'] = 'Continuar el último intento';
 $string['startnewattempt'] = 'Comenzar un nuevo intento';
@@ -28,7 +28,7 @@ $string['previousattempts'] = 'Intentos anteriores';
 $string['finishattempt'] = 'Terminar intento...';
 $string['submitandfinish'] = 'Enviar todo y terminar';
 
-// Gestión de Preguntas y Respuestas
+// Gestión de preguntas y respuestas.
 $string['question'] = 'Pregunta';
 $string['saved'] = 'Respuesta guardada';
 $string['notsaved'] = 'Aún sin responder';
@@ -37,13 +37,13 @@ $string['noresponseprovided'] = '-- No se ha proporcionado una respuesta.';
 $string['userresponsereview'] = 'Su respuesta';
 $string['solutionreview'] = 'Solución';
 
-// Permisos y Roles
+// Permisos y roles.
 $string['sqlab:addinstance'] = 'Agregar un nuevo SQLab';
 $string['sqlab:view'] = 'Ver SQLab';
 $string['sqlab:manage'] = 'Gestionar SQLab';
 $string['sqlab:attempt'] = 'Permitir al usuario intentar la actividad SQLab';
 
-// Calificaciones e Intentos
+// Calificaciones e intentos.
 $string['attemptsummary'] = 'Resumen del intento';
 $string['gradesummary'] = '<strong>{$a->obtained}</strong> de {$a->total} (<strong>{$a->percentage}</strong>%)';
 $string['gradereview'] = 'Calificación: {$a->usergrade}/{$a->totalgrade}';
@@ -51,7 +51,7 @@ $string['permittedattempts'] = 'Intentos permitidos: ';
 $string['unlimitedattempts'] = 'Intentos ilimitados.';
 $string['grade'] = 'Calificación';
 
-// Errores y Mensajes del Sistema
+// Errores y mensajes del sistema.
 $string['invalidcoursemodule'] = 'La actividad a la que intenta acceder no existe. Por favor, contacte a soporte si el problema persiste.';
 $string['invalidcourseid'] = 'El curso al que intenta acceder no existe. Por favor, contacte a soporte si el problema persiste.';
 $string['invalidattemptid'] = 'El intento al que intenta acceder no existe o ya no está disponible. Si cree que esto es un error, por favor contacte a soporte.';
@@ -80,7 +80,7 @@ $string['nocredentials'] = 'No se encontraron credenciales para el usuario.';
 $string['dbconnectionerror'] = 'No se puede conectar a la base de datos para la instancia de SQLab.';
 $string['nocmid'] = 'No se proporcionó un ID de módulo de curso. Por favor, contacta al soporte si el problema persiste.';
 
-// Configuración y Configuración
+// Configuración y puesta en marcha.
 $string['quizid'] = 'ID del Cuestionario';
 $string['quizid_help'] = 'la obtención del ID del Cuestionario con las preguntas SQL';
 $string['quizid_help_help'] = 'Para configurar SQLab correctamente, necesitas ingresar el ID de un Cuestionario con preguntas SQL que deseas que SQLab utilice. Cada cuestionario tiene un ID único asociado. Esta ID es fundamental para que SQLab pueda encontrar y cargar las preguntas SQL que deseas utilizar.';
@@ -88,7 +88,7 @@ $string['submissionperiod'] = 'Periodo de entrega';
 $string['startdate'] = 'Disponible desde';
 $string['duedate'] = 'Límite de entrega';
 
-// Seguridad y Control de Acceso
+// Seguridad y control de acceso.
 $string['securitysettings'] = 'Seguridad';
 $string['activitypassword'] = 'Contraseña de la actividad';
 $string['sqlabpasswordrequired'] = 'Para acceder a este SQLab es necesario conocer la contraseña.';
@@ -100,8 +100,9 @@ $string['passwordincorrect'] = 'Contraseña incorrecta.';
 $string['passwordempty'] = 'Por favor, introduzca una contraseña.';
 $string['unexpectederror'] = 'Se ha producido un error inesperado.';
 $string['ajaxerror'] = 'Error en la solicitud AJAX.';
+$string['sqlsyntaxerror'] = 'No se puede continuar debido a errores de sintaxis en sus evaluaciones de código SQL. Por favor, corríjalo e inténtelo de nuevo.';
 
-// Revisiones y Retroalimentación
+// Revisiones y retroalimentación.
 $string['review'] = 'Revisión';
 $string['reviewlinktext'] = 'Revisar intento';
 $string['startedon'] = 'Iniciado el';
@@ -111,7 +112,7 @@ $string['reviewgrade'] = 'Calificación';
 $string['finishreview'] = 'Finalizar revisión';
 $string['feedbackreview'] = 'Retroalimentación';
 
-// Personalización de la Interfaz de la Actividad
+// Personalización de la interfaz de la actividad.
 $string['name'] = 'Nombre de la actividad';
 $string['editorthemes'] = 'Temas del editor';
 $string['fontsize'] = 'Tamaño de letra';
@@ -123,7 +124,7 @@ $string['sqlresults'] = 'Resultados esperados';
 $string['relatedconcepts'] = 'Conceptos relacionados';
 $string['hints'] = 'Pistas';
 
-// Retroalimentación
+// Retroalimentación.
 $string['yes'] = 'Sí';
 $string['no'] = 'No';
 $string['not_present'] = 'No presente';
